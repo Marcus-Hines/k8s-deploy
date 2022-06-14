@@ -24,7 +24,7 @@ export class PrivateKubectl extends Kubectl{
       var spaceSeperatedFilenames = fileNames.join().replace(/,/g, " ");
       console.log("spaceSeperatedFilenames: " + spaceSeperatedFilenames);
 
-      privateClusterArgs.push(...["--file", "."]);
+      privateClusterArgs.push(...["--file", spaceSeperatedFilenames]);
       console.log("privateClusterArgs: " + privateClusterArgs);
     }
 
