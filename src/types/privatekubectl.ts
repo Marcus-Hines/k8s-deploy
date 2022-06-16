@@ -20,7 +20,7 @@ export class PrivateKubectl extends Kubectl{
     if(this.containsFilenames(kubectlCmd)) {
       const fileNames = this.extractFiles(kubectlCmd);
       
-       //var spaceSeperatedFilenames = fileNames.join().replace(/,/g, " ");
+      //var spaceSeperatedFilenames = fileNames.join().replace(/,/g, " ");
        console.log("Filenames should have no leading slashes: " + fileNames);
 
       privateClusterArgs.push(...["--file", "."]);
@@ -37,12 +37,10 @@ export class PrivateKubectl extends Kubectl{
   }
 
   public extractFiles(strToParse: string) {
-    console.log("calling extractFiles...");
     var result = [];
     var start = strToParse.indexOf("-filename"); 
     var offset = 7;
 
-    console.log("before offset check");
     if(start == -1){
       start = strToParse.indexOf("-f");
       
@@ -52,35 +50,31 @@ export class PrivateKubectl extends Kubectl{
       offset = 0;
     }
 
-    console.log("after offset check");    
+    
     var temp = strToParse.substring(start + offset);
     var end = temp.indexOf(" -");
     
     // End could be case where the -f flag was last, or -f is followed by some additonal flag and it's arguments
     result = temp.substring(3, end == -1 ? temp.length : end).trim().split(/[\s]+/);
-    console.log("Before removingLeadingSlashes");
     return this.removeLeadingSlashesFromFilenames(result);
   }
 
 
 
   private removeLeadingSlashesFromFilenames(arr: string[]){
-    console.log("Inside removeLeadingSlashesFromFilenames");
     if(arr == null || arr.length == 0){
       console.log("Attempting to remove leading slashes, but the input was null or empty");
       return arr;
     }
     
     for(var index = 0; index < arr.length; index++){
-      console.log("First char of " + arr[index] + " is : " + arr[index].charAt(0));
       // Skip if no leading slash
       if(arr[index].charAt(0) != "/"){
-        console.log("skipping because " + arr[index] + " has no leading slash");
         continue;
       }
       arr[index] = arr[index].substring(1);
     }
-    console.log("removed leading slashes: " + arr);
+
     return arr;
   }
 }
