@@ -98,9 +98,9 @@ function updateContainerImagesInManifestFiles(
     fs.writeFileSync(path.join(fileName), contents);
     newFilePaths.push(fileName);
     
-    fs.readdir(tempDirectory, (err, files) => {
+    fs.readdir(process.cwd(), (err, files) => {
       files.forEach(file => {
-        core.debug("TEMP File in temp directory: " + file);
+        core.debug("TEMP File in current directory: " + file);
       });
     });
     
