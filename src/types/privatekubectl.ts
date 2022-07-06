@@ -20,8 +20,6 @@ export class PrivateKubectl extends Kubectl{
   }
 
   protected async execute(args: string[], silent: boolean = false) {
-    super.isPrivateCluster = true; // This can probably be deleted
-    
     args.unshift("/k8stools/kubectl");
     var kubectlCmd = args.join(" ");
     var addFileFlag = false;
@@ -47,37 +45,26 @@ export class PrivateKubectl extends Kubectl{
       core.debug("ExecOptions current working directory: " + eo.cwd);
       privateClusterArgs.push(...["--file", "."]);
 
-
-      //fs.readdir("/tmp", (err, files) => {
-      //  files.forEach(file => {
-            var filenamesArr = filenames[0].split(",");
-            for(var index = 0; index < filenamesArr.length; index++){
-              var file = filenamesArr[index];
-              
-              if(file == null || file == undefined){
-                continue;
-              }
-
-              this.moveFileToTempManifestDir(file);
-          }
-           
-
+      var filenamesArr = filenames[0].split(",");
+      for(var index = 0; index < filenamesArr.length; index++){
+        var file = filenamesArr[index];
         
+        if(file == null || file == undefined){
+          continue;
+        }
 
-        
-        
-      //  });
-     // });
-
-     
+        try{
+          this.moveFileToTempManifestDir(file);
+        }catch(e){
+          core.debug("Could not move file to temp/manifests dir: " + e);
+        }
+      }
     }
     
-
     core.debug(`private cluster Kubectl run with invoke command: ${kubectlCmd}`);
     core.debug("EO as it goes into getExec " + eo.cwd);
     return await getExecOutput("az", privateClusterArgs, eo);
   }
-
 
 
   public extractFilesnames(strToParse: string) {
