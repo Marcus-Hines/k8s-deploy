@@ -22,19 +22,13 @@ export class Kubectl {
       namespace: string = 'default',
       ignoreSSLErrors: boolean = false,
       resourceGroup: string = '',
-      name: string = '',
-      isPrivateCluster: boolean = false
+      name: string = ''
    ) {
       this.kubectlPath = kubectlPath
       this.ignoreSSLErrors = !!ignoreSSLErrors
       this.namespace = namespace
       this.resourceGroup = resourceGroup
       this.name = name
-      this.isPrivateCluster = isPrivateCluster
-   }
-
-   public isPrivate() {
-      return this.isPrivateCluster
    }
 
    public async apply(

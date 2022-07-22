@@ -94,7 +94,6 @@ function updateContainerImagesInManifestFiles(
       const tempDirectory = getTempDirectory()
       const fileName = path.join(tempDirectory, path.basename(filePath))
       fs.writeFileSync(path.join(fileName), contents)
-      core.debug('Before pushing newFilePaths: ' + fileName)
       newFilePaths.push(fileName)
    })
 
@@ -298,7 +297,6 @@ function updateImagePullSecretsInManifestFiles(
 
    const newObjectsList = []
    filePaths.forEach((filePath: string) => {
-      core.debug('filePath before safeload: ' + filePath)
       const fileContents = fs.readFileSync(filePath).toString()
       yaml.safeLoadAll(fileContents, (inputObject: any) => {
          if (inputObject?.kind) {
@@ -306,7 +304,6 @@ function updateImagePullSecretsInManifestFiles(
             if (isWorkloadEntity(kind)) {
                updateImagePullSecrets(inputObject, imagePullSecrets)
             }
-            core.debug('inputObject after safeload: ' + inputObject)
             newObjectsList.push(inputObject)
          }
       })
